@@ -1,0 +1,108 @@
+<div class="create-trade-container fade-in">
+  <div class="header-row">
+    <button mat-icon-button routerLink="/trades">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>New Trade Idea</h1>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      @if (errorMessage()) {
+        <div class="error-message">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="trade-form">
+        <!-- Stock Symbol -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Stock Symbol</mat-label>
+          <input matInput formControlName="stockSymbol" placeholder="e.g. RELIANCE"
+                 style="text-transform: uppercase">
+          <mat-icon matPrefix>trending_up</mat-icon>
+          @if (tradeForm.get('stockSymbol')?.hasError('required') && tradeForm.get('stockSymbol')?.touched) {
+            <mat-error>Stock symbol is required</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Prices -->
+        <div class="price-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Entry Price (₹)</mat-label>
+            <input matInput type="number" formControlName="entryPrice" step="0.05" min="0.01">
+            @if (tradeForm.get('entryPrice')?.hasError('required') && tradeForm.get('entryPrice')?.touched) {
+              <mat-error>Required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Stop Loss (₹)</mat-label>
+            <input matInput type="number" formControlName="stopLoss" step="0.05" min="0.01">
+            @if (tradeForm.get('stopLoss')?.hasError('required') && tradeForm.get('stopLoss')?.touched) {
+              <mat-error>Required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Target Price (₹)</mat-label>
+            <input matInput type="number" formControlName="targetPrice" step="0.05" min="0.01">
+            @if (tradeForm.get('targetPrice')?.hasError('required') && tradeForm.get('targetPrice')?.touched) {
+              <mat-error>Required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- R:R Preview -->
+        <div class="rr-preview" [ngClass]="getRRDisplay().class">
+          <mat-icon>{{ getRRDisplay().icon }}</mat-icon>
+          {{ getRRDisplay().value }}
+        </div>
+
+        <!-- Timeframe & Reason -->
+        <div class="meta-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Timeframe</mat-label>
+            <mat-select formControlName="timeframe">
+              @for (tf of timeframes; track tf) {
+                <mat-option [value]="tf">{{ tf }}</mat-option>
+              }
+            </mat-select>
+            @if (tradeForm.get('timeframe')?.hasError('required') && tradeForm.get('timeframe')?.touched) {
+              <mat-error>Timeframe is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Reason</mat-label>
+            <mat-select formControlName="reason">
+              @for (r of reasons; track r.value) {
+                <mat-option [value]="r.value">{{ r.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Notes -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes (optional)</mat-label>
+          <textarea matInput formControlName="notes" rows="4"
+                    placeholder="Share your analysis, chart patterns, or rationale..."></textarea>
+          <mat-hint align="end">{{ tradeForm.get('notes')?.value?.length || 0 }} / 1000</mat-hint>
+        </mat-form-field>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button mat-button type="button" routerLink="/trades">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
+            @if (isLoading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              Submit Trade Idea
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

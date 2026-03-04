@@ -1,0 +1,161 @@
+<div class="trade-list-container fade-in">
+  <!-- Header -->
+  <div class="header-row">
+    <h1>Trade Ideas</h1>
+    @if (isAuthenticated()) {
+      <button mat-raised-button color="primary" routerLink="/trades/create">
+        <mat-icon>add</mat-icon>
+        New Trade Idea
+      </button>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-row">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Timeframe</mat-label>
+      <mat-select [(value)]="filterTimeframe" (selectionChange)="applyFilters()">
+        <mat-option value="">All</mat-option>
+        @for (tf of timeframes; track tf) {
+          <mat-option [value]="tf">{{ tf }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(value)]="filterStatus" (selectionChange)="applyFilters()">
+        <mat-option value="">All</mat-option>
+        @for (s of statuses; track s) {
+          <mat-option [value]="s">{{ s.replace('_', ' ') }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Reason</mat-label>
+      <mat-select [(value)]="filterReason" (selectionChange)="applyFilters()">
+        <mat-option value="">All</mat-option>
+        @for (r of reasons; track r) {
+          <mat-option [value]="r">{{ r.replace('_', ' ') }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field symbol-filter">
+      <mat-label>Symbol</mat-label>
+      <input matInput [(ngModel)]="filterSymbol" placeholder="e.g. RELIANCE"
+             (keyup.enter)="applyFilters()">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field symbol-filter">
+      <mat-label>Min R:R</mat-label>
+      <input matInput type="number" [(ngModel)]="filterMinRR" step="0.5" min="0"
+             (keyup.enter)="applyFilters()">
+    </mat-form-field>
+
+    <button mat-icon-button matTooltip="Clear filters" (click)="clearFilters()">
+      <mat-icon>clear_all</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (trades().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state card">
+      <mat-icon>lightbulb_outline</mat-icon>
+      <h3>No trade ideas found</h3>
+      <p>Try adjusting your filters or create the first trade idea!</p>
+    </div>
+  } @else {
+    <!-- Trade Table -->
+    <div class="table-container">
+      <table mat-table [dataSource]="trades()">
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="stockSymbol">
+          <th mat-header-cell *matHeaderCellDef>Symbol</th>
+          <td mat-cell *matCellDef="let trade" class="symbol-cell">
+            {{ trade.stockSymbol }}
+          </td>
+        </ng-container>
+
+        <!-- Entry Price Column -->
+        <ng-container matColumnDef="entryPrice">
+          <th mat-header-cell *matHeaderCellDef>Entry</th>
+          <td mat-cell *matCellDef="let trade">₹{{ trade.entryPrice | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <!-- Stop Loss Column -->
+        <ng-container matColumnDef="stopLoss">
+          <th mat-header-cell *matHeaderCellDef>SL</th>
+          <td mat-cell *matCellDef="let trade">₹{{ trade.stopLoss | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <!-- Target Column -->
+        <ng-container matColumnDef="targetPrice">
+          <th mat-header-cell *matHeaderCellDef>Target</th>
+          <td mat-cell *matCellDef="let trade">₹{{ trade.targetPrice | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <!-- R:R Column -->
+        <ng-container matColumnDef="riskRewardRatio">
+          <th mat-header-cell *matHeaderCellDef>R:R</th>
+          <td mat-cell *matCellDef="let trade">
+            <span class="rr-badge" [ngClass]="getRRClass(trade.riskRewardRatio)">
+              {{ trade.riskRewardRatio | number:'1.2-2' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Timeframe Column -->
+        <ng-container matColumnDef="timeframe">
+          <th mat-header-cell *matHeaderCellDef>Timeframe</th>
+          <td mat-cell *matCellDef="let trade">{{ trade.timeframe }}</td>
+        </ng-container>
+
+        <!-- Reason Column -->
+        <ng-container matColumnDef="reason">
+          <th mat-header-cell *matHeaderCellDef class="hide-mobile">Reason</th>
+          <td mat-cell *matCellDef="let trade" class="hide-mobile">
+            {{ trade.reason?.replace('_', ' ') || '—' }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let trade">
+            <span class="status-badge" [ngClass]="getStatusClass(trade.status)">
+              {{ trade.status.replace('_', ' ') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef class="hide-mobile">Date</th>
+          <td mat-cell *matCellDef="let trade" class="hide-mobile">
+            {{ formatDate(trade.createdAt) }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [routerLink]="['/trades', row.id]"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  }
+</div>

@@ -1,0 +1,21 @@
+<mat-card class="ticker-card" [ngClass]="'price-' + direction">
+  @if (tick) {
+    <div class="ticker-left">
+      <div class="symbol">{{ symbol }}</div>
+      <div class="volume">Vol: {{ formatVolume(tick.volume) }}</div>
+    </div>
+    <div class="ticker-right" [ngClass]="direction">
+      <div class="ltp">₹{{ tick.ltp | number:'1.2-2' }}</div>
+      <div class="change">
+        <mat-icon>{{ directionIcon }}</mat-icon>
+        {{ tick.change >= 0 ? '+' : '' }}{{ tick.change | number:'1.2-2' }}
+        ({{ tick.changePercent >= 0 ? '+' : '' }}{{ tick.changePercent | number:'1.2-2' }}%)
+      </div>
+    </div>
+  } @else {
+    <div class="ticker-left">
+      <div class="symbol">{{ symbol }}</div>
+    </div>
+    <div class="no-data">Awaiting data...</div>
+  }
+</mat-card>

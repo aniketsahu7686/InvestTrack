@@ -1,0 +1,65 @@
+<div class="price-dashboard fade-in">
+  <!-- Header -->
+  <div class="header-row">
+    <h1>Live Prices</h1>
+    <div class="connection-status">
+      <span class="status-dot" [ngClass]="isConnected() ? 'connected' : 'disconnected'"></span>
+      @if (isConnected()) {
+        <span>Connected</span>
+      } @else {
+        <span>Disconnected</span>
+        <button mat-stroked-button (click)="reconnect()" color="primary" style="margin-left: 8px">
+          <mat-icon>refresh</mat-icon> Reconnect
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Subscribe Input -->
+  <div class="subscribe-row">
+    <mat-form-field appearance="outline" class="subscribe-input">
+      <mat-label>Add Stock Symbol</mat-label>
+      <input matInput [(ngModel)]="newSymbol" placeholder="e.g. RELIANCE"
+             (keyup.enter)="addSymbol()" style="text-transform: uppercase">
+      <mat-icon matPrefix>add_circle_outline</mat-icon>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addSymbol()" [disabled]="!newSymbol.trim()">
+      Subscribe
+    </button>
+  </div>
+
+  <!-- Quick Add Chips -->
+  <div class="quick-add-chips">
+    @for (stock of popularStocks; track stock) {
+      <button mat-stroked-button
+              [color]="isQuickAddActive(stock) ? 'primary' : undefined"
+              (click)="quickAdd(stock)"
+              [disabled]="isQuickAddActive(stock)">
+        {{ stock }}
+      </button>
+    }
+  </div>
+
+  <!-- Price Tickers Grid -->
+  @if (getSubscribedArray().length === 0) {
+    <div class="empty-state card">
+      <mat-icon>show_chart</mat-icon>
+      <h3>No Subscriptions</h3>
+      <p>Add stock symbols above or click a popular stock to start watching live prices.</p>
+    </div>
+  } @else {
+    <div class="ticker-grid">
+      @for (symbol of getSubscribedArray(); track symbol) {
+        <div style="position: relative;">
+          <app-price-ticker [symbol]="symbol"></app-price-ticker>
+          <button mat-icon-button
+                  (click)="removeSymbol(symbol)"
+                  style="position: absolute; top: 4px; right: 4px; opacity: 0.5;"
+                  matTooltip="Unsubscribe">
+            <mat-icon style="font-size: 16px;">close</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

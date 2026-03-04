@@ -1,0 +1,108 @@
+<div class="leaderboard-container fade-in">
+  <h1>Leaderboard</h1>
+  <p class="subtitle">Performance rankings based on win rate, risk:reward, consistency, and risk control</p>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (traders().length === 0) {
+    <div class="empty-state card">
+      <mat-icon>emoji_events</mat-icon>
+      <h3>No rankings yet</h3>
+      <p>Rankings will appear once traders have enough completed trades.</p>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table mat-table [dataSource]="traders()">
+        <!-- Rank Column -->
+        <ng-container matColumnDef="rank">
+          <th mat-header-cell *matHeaderCellDef>Rank</th>
+          <td mat-cell *matCellDef="let trader; let i = index" class="rank-cell">
+            <span class="rank-medal">{{ getRankDisplay(i) }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Username Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Trader</th>
+          <td mat-cell *matCellDef="let trader" class="username-cell">
+            {{ trader.username }}
+          </td>
+        </ng-container>
+
+        <!-- Total Trades Column -->
+        <ng-container matColumnDef="totalTrades">
+          <th mat-header-cell *matHeaderCellDef>Trades</th>
+          <td mat-cell *matCellDef="let trader">{{ trader.totalTrades }}</td>
+        </ng-container>
+
+        <!-- Win Rate Column -->
+        <ng-container matColumnDef="winRate">
+          <th mat-header-cell *matHeaderCellDef>Win Rate</th>
+          <td mat-cell *matCellDef="let trader">
+            <div class="win-rate-bar">
+              <div class="bar-track">
+                <div class="bar-fill"
+                     [style.width.%]="trader.winRate"
+                     [style.background-color]="getWinRateColor(trader.winRate)">
+                </div>
+              </div>
+              <span class="bar-label">{{ trader.winRate | number:'1.1-1' }}%</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Avg R:R Column -->
+        <ng-container matColumnDef="avgRiskReward">
+          <th mat-header-cell *matHeaderCellDef
+              matTooltip="Average Risk:Reward ratio across all trades">
+            Avg R:R
+          </th>
+          <td mat-cell *matCellDef="let trader">
+            {{ trader.avgRiskReward | number:'1.2-2' }}
+          </td>
+        </ng-container>
+
+        <!-- Streak Column -->
+        <ng-container matColumnDef="currentStreak">
+          <th mat-header-cell *matHeaderCellDef class="hide-mobile">Streak</th>
+          <td mat-cell *matCellDef="let trader" class="hide-mobile">
+            <span class="streak-badge" [ngClass]="getStreakClass(trader.currentStreak)">
+              @if (trader.currentStreak > 0) {
+                <mat-icon>local_fire_department</mat-icon>
+              } @else if (trader.currentStreak < 0) {
+                <mat-icon>trending_down</mat-icon>
+              }
+              {{ trader.currentStreak > 0 ? '+' : '' }}{{ trader.currentStreak }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Score Column -->
+        <ng-container matColumnDef="overallRankingScore">
+          <th mat-header-cell *matHeaderCellDef
+              matTooltip="Overall ranking score (0-100)">
+            Score
+          </th>
+          <td mat-cell *matCellDef="let trader" class="score-cell">
+            {{ trader.overallRankingScore | number:'1.1-1' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [routerLink]="['/trader', row.userId]"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  }
+</div>

@@ -1,0 +1,98 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # Auth Service routes
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=0
+
+        # Trade Service routes
+        - id: trade-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/trades/**
+          filters:
+            - StripPrefix=0
+
+        # Market Data Service routes
+        - id: market-data-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/prices/**, /kite/**
+          filters:
+            - StripPrefix=0
+
+        # Analytics Service routes
+        - id: analytics-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/analytics/**
+          filters:
+            - StripPrefix=0
+
+      # Global CORS configuration
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+            maxAge: 3600
+
+      # Default filters
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 5000ms
+
+# JWT Configuration (same secret as other services)
+jwt:
+  secret: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItaW52ZXN0dHJhY2stand0LXRva2VuLXNpZ25pbmctMjAyNA==
+
+# Rate Limiting Configuration
+rate-limiting:
+  enabled: true
+  default-replenish-rate: 10
+  default-burst-capacity: 20
+  trade-post-replenish-rate: 5
+  trade-post-burst-capacity: 10
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: when-authorized
+
+# Logging
+logging:
+  level:
+    com.investtrack.gateway: DEBUG
+    org.springframework.cloud.gateway: INFO

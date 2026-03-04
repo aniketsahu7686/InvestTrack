@@ -1,0 +1,102 @@
+<div class="trade-detail-container fade-in">
+  <div class="header-row">
+    <button mat-icon-button routerLink="/trades">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Trade Detail</h1>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (notFound()) {
+    <div class="not-found card">
+      <mat-icon>search_off</mat-icon>
+      <h3>Trade idea not found</h3>
+      <p>The trade idea you're looking for doesn't exist or has been removed.</p>
+      <button mat-raised-button color="primary" routerLink="/trades" style="margin-top: 16px">
+        Back to Trade Ideas
+      </button>
+    </div>
+  } @else if (trade(); as t) {
+    <mat-card class="detail-card">
+      <mat-card-content>
+        <!-- Symbol & Status Header -->
+        <div class="symbol-header">
+          <span class="symbol">{{ t.stockSymbol }}</span>
+          <span class="status-badge" [ngClass]="getStatusClass(t.status)">
+            {{ t.status.replace('_', ' ') }}
+          </span>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Price Grid -->
+        <div class="price-grid">
+          <div class="price-item entry">
+            <div class="label">Entry Price</div>
+            <div class="value">₹{{ t.entryPrice | number:'1.2-2' }}</div>
+          </div>
+          <div class="price-item sl">
+            <div class="label">Stop Loss</div>
+            <div class="value">₹{{ t.stopLoss | number:'1.2-2' }}</div>
+          </div>
+          <div class="price-item target">
+            <div class="label">Target Price</div>
+            <div class="value">₹{{ t.targetPrice | number:'1.2-2' }}</div>
+          </div>
+          <div class="price-item rr">
+            <div class="label">Risk : Reward</div>
+            <div class="value">
+              <span class="rr-badge" [ngClass]="getRRClass(t.riskRewardRatio)">
+                1:{{ t.riskRewardRatio | number:'1.2-2' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Meta Information -->
+        <div class="meta-grid">
+          <div class="meta-item">
+            <div class="label">Timeframe</div>
+            <div class="value">{{ t.timeframe }}</div>
+          </div>
+          <div class="meta-item">
+            <div class="label">Reason</div>
+            <div class="value">{{ t.reason?.replace('_', ' ') || '—' }}</div>
+          </div>
+          <div class="meta-item">
+            <div class="label">Created</div>
+            <div class="value">{{ formatDateTime(t.createdAt) }}</div>
+          </div>
+          @if (t.updatedAt && t.updatedAt !== t.createdAt) {
+            <div class="meta-item">
+              <div class="label">Last Updated</div>
+              <div class="value">{{ formatDateTime(t.updatedAt) }}</div>
+            </div>
+          }
+          <div class="meta-item">
+            <div class="label">Trader</div>
+            <div class="value">
+              <a [routerLink]="['/trader', t.userId]" style="color: var(--primary); text-decoration: none;">
+                {{ t.username || 'View Profile' }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        @if (t.notes) {
+          <mat-divider></mat-divider>
+          <div class="notes-section">
+            <h3>Analysis Notes</h3>
+            <div class="notes-content">{{ t.notes }}</div>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
