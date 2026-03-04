@@ -1,0 +1,44 @@
+# ──────────────────────────────────────────────────────────
+# InvestTrack .gitignore
+# ──────────────────────────────────────────────────────────
+
+# ── Secrets / Environment ─────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ── Java / Maven ──────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.iml
+.idea/
+*.swp
+.project
+.classpath
+.settings/
+
+# ── Node / Angular ────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.sass-cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── OS Files ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Docker ────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── VS Code ──────────────────────────────────────────────
+.vscode/

@@ -13,7 +13,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/investtrack_trade
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
 
   # ── JPA / Hibernate ────────────────────────────────────
@@ -37,7 +37,7 @@ spring:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
+    password: ${RABBITMQ_PASSWORD:}
 
   # ── Jackson ─────────────────────────────────────────────
   jackson:
@@ -47,7 +47,7 @@ spring:
 
 # ── JWT Configuration ───────────────────────────────────────
 jwt:
-  secret: ${JWT_SECRET:dGhpcyBpcyBhIHZlcnkgc2VjdXJlIGtleSBmb3IgSW52ZXN0VHJhY2sgcGxhdGZvcm0gand0}
+  secret: ${JWT_SECRET:}
   expiration-ms: ${JWT_EXPIRATION_MS:86400000}
 
 # ── Actuator ────────────────────────────────────────────────

@@ -7,8 +7,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/investtrack_marketdata
-    username: postgres
-    password: postgres
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -32,15 +32,15 @@ spring:
       timeout: 5000ms
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:}
 
 # Kite Connect API Configuration
 kite:
-  api-key: ${KITE_API_KEY:your_kite_api_key}
-  api-secret: ${KITE_API_SECRET:your_kite_api_secret}
+  api-key: ${KITE_API_KEY:}
+  api-secret: ${KITE_API_SECRET:}
   redirect-url: http://localhost:8083/kite/callback
   login-url: https://kite.zerodha.com/connect/login
 

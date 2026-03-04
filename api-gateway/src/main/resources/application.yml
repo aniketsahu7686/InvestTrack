@@ -69,7 +69,7 @@ spring:
 
 # JWT Configuration (same secret as other services)
 jwt:
-  secret: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItaW52ZXN0dHJhY2stand0LXRva2VuLXNpZ25pbmctMjAyNA==
+  secret: ${JWT_SECRET:}
 
 # Rate Limiting Configuration
 rate-limiting:

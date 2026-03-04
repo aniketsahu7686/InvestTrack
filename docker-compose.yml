@@ -63,8 +63,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: investtrack-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@investtrack.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@investtrack.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "5050:80"
     depends_on:
