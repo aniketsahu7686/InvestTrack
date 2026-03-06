@@ -19,34 +19,34 @@
         Back to Leaderboard
       </button>
     </div>
-  } @else if (stats(); as s) {
+  } @else if (stats()) {
     <!-- Username Header -->
-    <h2 style="margin-bottom: 24px; font-weight: 400;">{{ s.username }}</h2>
+    <h2 style="margin-bottom: 24px; font-weight: 400;">{{ stats()!.username }}</h2>
 
     <!-- Stats Overview Cards -->
     <div class="stats-overview">
       <div class="stat-card highlight">
-        <div class="stat-value">{{ s.overallRankingScore | number:'1.1-1' }}</div>
+        <div class="stat-value">{{ stats()!.overallRankingScore | number:'1.1-1' }}</div>
         <div class="stat-label">Overall Score</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ s.totalTrades }}</div>
+        <div class="stat-value">{{ stats()!.totalTrades }}</div>
         <div class="stat-label">Total Trades</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ s.winRate | number:'1.1-1' }}%</div>
+        <div class="stat-value">{{ stats()!.winRate | number:'1.1-1' }}%</div>
         <div class="stat-label">Win Rate</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ s.avgRiskReward | number:'1.2-2' }}</div>
+        <div class="stat-value">{{ stats()!.avgRiskReward | number:'1.2-2' }}</div>
         <div class="stat-label">Avg R:R</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ s.currentStreak >= 0 ? '+' : '' }}{{ s.currentStreak }}</div>
+        <div class="stat-value">{{ stats()!.currentStreak >= 0 ? '+' : '' }}{{ stats()!.currentStreak }}</div>
         <div class="stat-label">Current Streak</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ s.bestStreak }}</div>
+        <div class="stat-value">{{ stats()!.bestStreak }}</div>
         <div class="stat-label">Best Streak</div>
       </div>
     </div>
@@ -62,12 +62,12 @@
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Win Rate (40% weight)</span>
-              <span class="value">{{ s.winRate | number:'1.1-1' }}%</span>
+              <span class="value">{{ stats()!.winRate | number:'1.1-1' }}%</span>
             </div>
             <div class="progress-track">
               <div class="progress-fill"
-                   [style.width.%]="s.winRate"
-                   [style.background-color]="getScoreColor(s.winRate)"></div>
+                   [style.width.%]="stats()!.winRate"
+                   [style.background-color]="getScoreColor(stats()!.winRate)"></div>
             </div>
           </div>
 
@@ -75,12 +75,12 @@
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Avg R:R Score (30% weight)</span>
-              <span class="value">{{ s.avgRiskReward | number:'1.2-2' }}</span>
+              <span class="value">{{ stats()!.avgRiskReward | number:'1.2-2' }}</span>
             </div>
             <div class="progress-track">
               <div class="progress-fill"
-                   [style.width.%]="(s.avgRiskReward / 5) * 100"
-                   [style.background-color]="getScoreColor((s.avgRiskReward / 5) * 100)"></div>
+                   [style.width.%]="(stats()!.avgRiskReward / 5) * 100"
+                   [style.background-color]="getScoreColor((stats()!.avgRiskReward / 5) * 100)"></div>
             </div>
           </div>
 
@@ -88,12 +88,12 @@
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Consistency (20% weight)</span>
-              <span class="value">{{ s.consistencyScore | number:'1.1-1' }}</span>
+              <span class="value">{{ stats()!.consistencyScore | number:'1.1-1' }}</span>
             </div>
             <div class="progress-track">
               <div class="progress-fill"
-                   [style.width.%]="s.consistencyScore"
-                   [style.background-color]="getScoreColor(s.consistencyScore)"></div>
+                   [style.width.%]="stats()!.consistencyScore"
+                   [style.background-color]="getScoreColor(stats()!.consistencyScore)"></div>
             </div>
           </div>
 
@@ -101,12 +101,12 @@
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Risk Control (10% weight)</span>
-              <span class="value">{{ s.riskControlScore | number:'1.1-1' }}</span>
+              <span class="value">{{ stats()!.riskControlScore | number:'1.1-1' }}</span>
             </div>
             <div class="progress-track">
               <div class="progress-fill"
-                   [style.width.%]="s.riskControlScore"
-                   [style.background-color]="getScoreColor(s.riskControlScore)"></div>
+                   [style.width.%]="stats()!.riskControlScore"
+                   [style.background-color]="getScoreColor(stats()!.riskControlScore)"></div>
             </div>
           </div>
         </div>
@@ -123,19 +123,19 @@
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Wins (Target Hit)</span>
-              <span class="value" style="color: var(--success)">{{ s.wins }}</span>
+              <span class="value" style="color: var(--success)">{{ stats()!.wins }}</span>
             </div>
           </div>
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Losses (SL Hit)</span>
-              <span class="value" style="color: var(--warn)">{{ s.losses }}</span>
+              <span class="value" style="color: var(--warn)">{{ stats()!.losses }}</span>
             </div>
           </div>
           <div class="breakdown-item">
             <div class="item-header">
               <span class="label">Expired</span>
-              <span class="value" style="color: var(--text-secondary)">{{ s.expired }}</span>
+              <span class="value" style="color: var(--text-secondary)">{{ stats()!.expired }}</span>
             </div>
           </div>
         </div>
