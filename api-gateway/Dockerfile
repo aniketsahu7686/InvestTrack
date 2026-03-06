@@ -18,7 +18,7 @@ RUN mvn dependency:go-offline -pl api-gateway -am -B
 COPY api-gateway/src ./api-gateway/src
 
 # Build
-RUN mvn clean package -pl api-gateway -am -DskipTests -B
+RUN mvn clean package -pl api-gateway -am -Dmaven.test.skip=true -B
 
 # ---- Runtime Stage ----
 FROM eclipse-temurin:17-jre-alpine AS runtime

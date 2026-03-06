@@ -36,7 +36,7 @@ public class PriceCacheService {
         String key = PRICE_KEY_PREFIX + priceUpdate.getStockSymbol().toUpperCase();
 
         redisTemplate.opsForValue().set(key, priceUpdate, cacheTtlSeconds, TimeUnit.SECONDS);
-        log.debug("Cached price for {}: LTP={}", priceUpdate.getStockSymbol(), priceUpdate.getLtp());
+        log.debug("Cached price for {}: LTP={}", priceUpdate.getStockSymbol(), priceUpdate.getLastTradedPrice());
     }
 
     /**
@@ -50,7 +50,7 @@ public class PriceCacheService {
         Object cached = redisTemplate.opsForValue().get(key);
 
         if (cached instanceof PriceUpdateDTO priceUpdate) {
-            log.debug("Cache hit for {}: LTP={}", stockSymbol, priceUpdate.getLtp());
+            log.debug("Cache hit for {}: LTP={}", stockSymbol, priceUpdate.getLastTradedPrice());
             return priceUpdate;
         }
 

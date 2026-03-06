@@ -14,7 +14,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import jakarta.annotation.PreDestroy;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -159,13 +158,13 @@ public class KiteWebSocketClient extends TextWebSocketHandler {
 
         PriceUpdateDTO priceUpdate = PriceUpdateDTO.builder()
                 .stockSymbol(symbol)
-                .ltp(ltp)
+                .lastTradedPrice(ltp)
                 .open(open)
                 .high(high)
                 .low(low)
                 .close(close)
                 .volume(volume)
-                .timestamp(LocalDateTime.now())
+                .timestamp(System.currentTimeMillis())
                 .build();
 
         // Update Redis cache

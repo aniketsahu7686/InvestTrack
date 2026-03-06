@@ -19,7 +19,7 @@ COPY common-lib/src ./common-lib/src
 COPY analytics-service/src ./analytics-service/src
 
 # Build
-RUN mvn clean package -pl common-lib,analytics-service -am -DskipTests -B
+RUN mvn clean package -pl common-lib,analytics-service -am -Dmaven.test.skip=true -B
 
 # ---- Runtime Stage ----
 FROM eclipse-temurin:17-jre-alpine AS runtime

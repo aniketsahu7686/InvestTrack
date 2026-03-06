@@ -32,7 +32,7 @@ public class PriceUpdateListener {
     @RabbitListener(queues = "${investtrack.rabbitmq.price-update-queue:investtrack.price.update.queue}")
     public void handlePriceUpdate(PriceUpdateEvent event) {
         String symbol = event.getStockSymbol().toUpperCase();
-        BigDecimal ltp = event.getLtp();
+        BigDecimal ltp = event.getLastTradedPrice();
 
         log.info("Received price update: symbol={}, LTP={}", symbol, ltp);
 

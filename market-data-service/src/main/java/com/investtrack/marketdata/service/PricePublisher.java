@@ -31,7 +31,7 @@ public class PricePublisher {
 
         PriceUpdateEvent event = PriceUpdateEvent.builder()
                 .stockSymbol(priceUpdate.getStockSymbol())
-                .ltp(priceUpdate.getLtp())
+                .lastTradedPrice(priceUpdate.getLastTradedPrice())
                 .timestamp(priceUpdate.getTimestamp())
                 .build();
 
@@ -41,6 +41,6 @@ public class PricePublisher {
                 event
         );
 
-        log.debug("Published price update: symbol={}, LTP={}", priceUpdate.getStockSymbol(), priceUpdate.getLtp());
+        log.debug("Published price update: symbol={}, LTP={}", priceUpdate.getStockSymbol(), priceUpdate.getLastTradedPrice());
     }
 }

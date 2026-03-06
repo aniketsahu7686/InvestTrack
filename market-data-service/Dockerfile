@@ -19,7 +19,7 @@ COPY common-lib/src ./common-lib/src
 COPY market-data-service/src ./market-data-service/src
 
 # Build
-RUN mvn clean package -pl common-lib,market-data-service -am -DskipTests -B
+RUN mvn clean package -pl common-lib,market-data-service -am -Dmaven.test.skip=true -B
 
 # ---- Runtime Stage ----
 FROM eclipse-temurin:17-jre-alpine AS runtime

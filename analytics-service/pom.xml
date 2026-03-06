@@ -6,8 +6,9 @@
 
     <parent>
         <groupId>com.investtrack</groupId>
-        <artifactId>investtrack-parent</artifactId>
+        <artifactId>investtrack-platform</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>analytics-service</artifactId>
@@ -19,7 +20,6 @@
         <dependency>
             <groupId>com.investtrack</groupId>
             <artifactId>common-lib</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Spring Boot Web -->
@@ -45,10 +45,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
         <!-- RabbitMQ -->
@@ -95,4 +91,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
