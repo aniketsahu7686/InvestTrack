@@ -47,11 +47,10 @@ public class TradeIdeaRequest {
     @NotNull(message = "Trade reason is required")
     private TradeReason reason;
 
-    @NotNull(message = "Risk percentage is required")
     @DecimalMin(value = "0.1", message = "Risk percentage must be at least 0.1%")
     @DecimalMax(value = "100.0", message = "Risk percentage must not exceed 100%")
     private BigDecimal riskPercentage;
 
-    @Size(max = 500, message = "Notes must not exceed 500 characters")
+    @Size(max = 1000, message = "Notes must not exceed 1000 characters")
     private String notes;
 }
